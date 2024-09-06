@@ -1,0 +1,72 @@
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\appsettings.Development.json
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\appsettings.json
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Real-Time Chat Application.staticwebassets.runtime.json
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Real-Time Chat Application.exe
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Real-Time Chat Application.deps.json
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Real-Time Chat Application.runtimeconfig.json
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Real-Time Chat Application.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Real-Time Chat Application.pdb
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Humanizer.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.Identity.Client.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\System.Drawing.Common.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\System.Runtime.Caching.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\System.Security.Permissions.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\System.Windows.Extensions.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.csproj.AssemblyReference.cache
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.AssemblyInfoInputs.cache
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.AssemblyInfo.cs
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.csproj.CoreCompileInputs.cache
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.MvcApplicationPartsAssemblyInfo.cache
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\staticwebassets.build.json
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\staticwebassets.development.json
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\staticwebassets\msbuild.Real-Time Chat Application.Microsoft.AspNetCore.StaticWebAssets.props
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\staticwebassets\msbuild.build.Real-Time Chat Application.props
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Real-Time Chat Application.props
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Real-Time Chat Application.props
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\staticwebassets.pack.json
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\scopedcss\bundle\Real-Time Chat Application.styles.css
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Tim.C150EF2A.Up2Date
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.dll
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\refint\Real-Time Chat Application.dll
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.pdb
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.genruntimeconfig.cache
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\ref\Real-Time Chat Application.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\AutoMapper.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.InMemory.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Microsoft.OpenApi.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.MvcApplicationPartsAssemblyInfo.cs
