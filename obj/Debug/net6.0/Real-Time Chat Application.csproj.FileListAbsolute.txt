@@ -70,3 +70,5 @@ D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Swashbuckle.AspN
 D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.MvcApplicationPartsAssemblyInfo.cs
+D:\Chat Application\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.sourcelink.json
+D:\Chat Application\Real-Time Chat Application\bin\Debug\net6.0\BCrypt.Net-Next.dll

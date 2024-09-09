@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Real_Time_Chat_Application.Models;
 using Real_Time_Chat_Application.Models.DTOs;
 
@@ -13,7 +14,7 @@ namespace Real_Time_Chat_Application.Data
         _context = context;
         _mapper = mapper;
     }
-    public IEnumerable<UserDTO> GetAllUsers()
+        public IEnumerable<UserDTO> GetAllUsers()
     {
         var users = _context.Users.ToList();
         return _mapper.Map<IEnumerable<UserDTO>>(users);
@@ -27,7 +28,17 @@ namespace Real_Time_Chat_Application.Data
 
         public void AddUser(CreateUserDTO createUserDTO)
         {
+            if (string.IsNullOrWhiteSpace(createUserDTO.Password))
+            {
+                throw new ArgumentException("Password is required.");
+            }
+            // Map CreateUserDTO to User
             var user = _mapper.Map<User>(createUserDTO);
+
+            // Hash the password and set the PasswordHash property
+            user.PasswordHash = PasswordHelper.HashPassword(createUserDTO.Password);
+
+            // Add the user to the context and save
             _context.Users.Add(user);
             _context.SaveChanges();
         }

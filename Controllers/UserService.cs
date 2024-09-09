@@ -1,4 +1,5 @@
 ﻿using Real_Time_Chat_Application.Data;
+using Real_Time_Chat_Application.Models;
 using Real_Time_Chat_Application.Models.DTOs;
 
 namespace Real_Time_Chat_Application.Controllers
@@ -24,6 +25,10 @@ namespace Real_Time_Chat_Application.Controllers
 
         public void CreateUser(CreateUserDTO createUserDTO)
         {
+            if (string.IsNullOrEmpty(createUserDTO.Password))
+            {
+                throw new ArgumentException("Password is required");
+            }
             _userRepository.AddUser(createUserDTO);
         }
 

@@ -22,6 +22,9 @@ namespace Real_Time_Chat_Application.Data
                 .HasMany(u => u.Users)
                 .WithMany(u => u.ChatRooms)
                 .UsingEntity(j => j.ToTable("UserChatRooms"));
+
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ChatMessage>().ToTable("ChatMessages");
         }
         
     }
