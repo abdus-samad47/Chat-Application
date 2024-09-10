@@ -9,9 +9,9 @@ namespace Real_Time_Chat_Application.Models
         public MappingProfiles()
         {
             CreateMap<User, UserDTO>();
-            CreateMap<CreateUserDTO, User>()
-                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
+            CreateMap<CreateUserDTO, User>();
             CreateMap<UpdateUserDTO, User>();
+            CreateMap<User, VerifyUserDTO>();
             CreateMap<ChatMessage, ChatMessageDTO>();
             CreateMap<CreateChatMessageDTO, ChatMessage>();
             CreateMap<UpdateChatMessageDTO, ChatMessage>();

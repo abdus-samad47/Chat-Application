@@ -10,7 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<UserRepository>();
+
+//builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<ChatMessageRepository>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles));

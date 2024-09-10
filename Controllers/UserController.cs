@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Real_Time_Chat_Application.Data;
 using Real_Time_Chat_Application.Models;
 using Real_Time_Chat_Application.Models.DTOs;
+using Real_Time_Chat_Application.Utility;
 
 namespace Real_Time_Chat_Application.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -30,7 +33,7 @@ namespace Real_Time_Chat_Application.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> GetUser(int id)
+        public async Task<ActionResult<VerifyUserDTO>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -42,10 +45,38 @@ namespace Real_Time_Chat_Application.Controllers
             return Ok(_mapper.Map<UserDTO>(user));
         }
 
+        [HttpPost("Verify")]
+        public async Task<ActionResult<UserDTO>> Verify(VerifyUserDTO verifyuserDTO)
+        {
+            // Find user by name
+            var user = await _context.Users
+                .SingleOrDefaultAsync(u => u.Name == verifyuserDTO.Name);
+
+            if (user == null)
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
+            // Verify password
+            var hashedPassword = Hashing.hashPassword(verifyuserDTO.Password, user.Salt);
+            if (user.PasswordHash != hashedPassword)
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
+            // If successful, return user data (or a token if using authentication tokens)
+            return Ok(_mapper.Map<UserDTO>(user));
+        }
+
+
         // POST: api/Users
         [HttpPost]
         public async Task<ActionResult<UserDTO>> PostUser(CreateUserDTO createUserDTO)
         {
+            var salt = Hashing.Salt();
+            var password = createUserDTO.PasswordHash;
+            var hashingPassowrd = Hashing.hashPassword(password, salt);
+            createUserDTO.PasswordHash = hashingPassowrd;
             var user = _mapper.Map<User>(createUserDTO);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
