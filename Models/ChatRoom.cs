@@ -1,11 +1,17 @@
-﻿namespace Real_Time_Chat_Application.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Real_Time_Chat_Application.Models
 {
     public class ChatRoom
     {
-        public int Id { get; set; }
+        [Key]
+        public int RoomID { get; set; }
         public string RoomName { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
+        public int CreatedBy { get; set; }
 
-        public ICollection<ChatMessage> Messages { get; set; } = null!;
-        public ICollection<User> Users { get; set; } = null!;
+        public User Creator { get; set; } = null!;
+        public ICollection<ChatMessage>? Messages { get; set; }
+        public ICollection<ChatRoomUser>? ChatRoomUsers { get; set; }
     }
 }

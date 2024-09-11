@@ -45,7 +45,7 @@ namespace Real_Time_Chat_Application.Controllers
             var message = _mapper.Map<ChatMessage>(createChatMessageDTO);
             await _repository.AddChatMessageAsync(message);
             var messageDTO = _mapper.Map<ChatMessageDTO>(message);
-            return CreatedAtAction(nameof(GetChatMessage), new { id = message.Id }, messageDTO);
+            return CreatedAtAction(nameof(GetChatMessage), new { id = message.MessageId }, messageDTO);
         }
 
 

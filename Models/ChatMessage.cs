@@ -1,17 +1,28 @@
-﻿namespace Real_Time_Chat_Application.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Real_Time_Chat_Application.Models
 {
     public class ChatMessage
     {
-        public int Id { get; set; }
+        [Key]
+        public int MessageId { get; set; }
         public string MessageText { get; set; } = null!;
+        
+        [Required]
+        public int SenderID { get; set; }
+        public int ReceiverID { get; set; }
         public DateTime SentAt { get; set; }
+        public int ChatRoomID { get; set; }
 
-        //Foreign Keys
-        public int UserId { get; set; }
-        public int ChatRoomId  { get; set; }
+        [ForeignKey("SenderID")]
+        public User Sender { get; set; } = null!;
 
-        //Navigation Properties
-        public ChatRoom ChatRoom { get; set; } = null!;
-        public User User { get; set; } = null!;
+        [ForeignKey("ReceiverID")]
+        public User? Receiver { get; set; }
+
+        [ForeignKey("ChatRoomID")]
+        public ChatRoom? ChatRoom  { get; set; }
+
     }
 }

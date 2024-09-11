@@ -45,28 +45,28 @@ namespace Real_Time_Chat_Application.Controllers
             return Ok(_mapper.Map<UserDTO>(user));
         }
 
-        [HttpPost("Verify")]
-        public async Task<ActionResult<UserDTO>> Verify(VerifyUserDTO verifyuserDTO)
-        {
-            // Find user by name
-            var user = await _context.Users
-                .SingleOrDefaultAsync(u => u.Name == verifyuserDTO.Name);
+        //[HttpPost("Verify")]
+        //public async Task<ActionResult<UserDTO>> Verify(VerifyUserDTO verifyuserDTO)
+        //{
+        //    // Find user by name
+        //    var user = await _context.Users
+        //        .SingleOrDefaultAsync(u => u.Username == verifyuserDTO.Username);
 
-            if (user == null)
-            {
-                return Unauthorized("Invalid username or password.");
-            }
+        //    if (user == null)
+        //    {
+        //        return Unauthorized("Invalid username or password.");
+        //    }
 
-            // Verify password
-            var hashedPassword = Hashing.hashPassword(verifyuserDTO.Password, user.Salt);
-            if (user.PasswordHash != hashedPassword)
-            {
-                return Unauthorized("Invalid username or password.");
-            }
+        //    // Verify password
+        //    var hashedPassword = Hashing.hashPassword(verifyuserDTO.Password, user.Salt);
+        //    if (user.PasswordHash != hashedPassword)
+        //    {
+        //        return Unauthorized("Invalid username or password.");
+        //    }
 
-            // If successful, return user data (or a token if using authentication tokens)
-            return Ok(_mapper.Map<UserDTO>(user));
-        }
+        //    // If successful, return user data (or a token if using authentication tokens)
+        //    return Ok(_mapper.Map<UserDTO>(user));
+        //}
 
 
         // POST: api/Users
@@ -78,10 +78,11 @@ namespace Real_Time_Chat_Application.Controllers
             var hashingPassowrd = Hashing.hashPassword(password, salt);
             createUserDTO.PasswordHash = hashingPassowrd;
             var user = _mapper.Map<User>(createUserDTO);
+            user.Salt = salt;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, _mapper.Map<UserDTO>(user));
+            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, _mapper.Map<UserDTO>(user));
         }
 
         // PUT: api/Users/5
