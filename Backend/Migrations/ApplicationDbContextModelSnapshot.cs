@@ -83,6 +83,12 @@ namespace Real_Time_Chat_Application.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
                     b.ToTable("Users", (string)null);
                 });
 
@@ -95,7 +101,7 @@ namespace Real_Time_Chat_Application.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageId"), 1L, 1);
 
-                    b.Property<int>("ChatRoomId")
+                    b.Property<int?>("ChatRoomId")
                         .HasColumnType("int")
                         .HasColumnName("ChatMessage_RoomId");
 
@@ -106,7 +112,7 @@ namespace Real_Time_Chat_Application.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasColumnName("ChatMessage_Text");
 
-                    b.Property<int>("ReceiverId")
+                    b.Property<int?>("ReceiverId")
                         .HasColumnType("int")
                         .HasColumnName("ChatMessage_Receiver");
 
@@ -211,14 +217,12 @@ namespace Real_Time_Chat_Application.Migrations
                     b.HasOne("Real_Time_Chat_Application.Models.ChatRoom", "ChatRoom")
                         .WithMany("Messages")
                         .HasForeignKey("ChatRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Real_Time_Chat_Application.Entities.User", "Receiver")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Real_Time_Chat_Application.Entities.User", "Sender")
                         .WithMany("SentMessages")

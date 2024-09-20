@@ -78,6 +78,15 @@ namespace Real_Time_Chat_Application.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDTO>> PostUser(CreateUserDTO createUserDTO)
         {
+            // Check if a user with the same email already exists
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == createUserDTO.Email);
+
+            if (existingUser != null)
+            {
+                return Conflict("User with the same email already exists.");
+            }
+
             var salt = Hashing.Salt();
             var password = createUserDTO.PasswordHash;
             var hashingPassowrd = Hashing.hashPassword(password, salt);

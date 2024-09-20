@@ -9,9 +9,9 @@ namespace Real_Time_Chat_Application.Models
         public int MessageId { get; set; }
         public string MessageText { get; set; }
         public int SenderId { get; set; }
-        public int ReceiverId { get; set; }
+        public int? ReceiverId { get; set; }
         public DateTime SentAt { get; set; }
-        public int ChatRoomId { get; set; }
+        public int? ChatRoomId { get; set; }
 
         [ForeignKey("SenderId")]
         public User Sender { get; set; }

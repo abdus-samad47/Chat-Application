@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DjpVvtgzK3Q=",
+  "dgSpecHash": "lm8anR+sIII=",
   "success": true,
-  "projectFilePath": "C:\\Real-Time Chat Application\\Real-Time Chat Application.csproj",
+  "projectFilePath": "C:\\Real-Time Chat Application\\Backend\\Real-Time Chat Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Abdul Raffay\\.nuget\\packages\\automapper\\8.1.1\\automapper.8.1.1.nupkg.sha512",
     "C:\\Users\\Abdul Raffay\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\6.1.1\\automapper.extensions.microsoft.dependencyinjection.6.1.1.nupkg.sha512",

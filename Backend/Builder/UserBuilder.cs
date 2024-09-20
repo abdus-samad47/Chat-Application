@@ -21,6 +21,10 @@ namespace Real_Time_Chat_Application.Builder
             builder.Property(u => u.CreatedAt).HasColumnName("User_CreatedAt").IsRequired().HasDefaultValueSql("GETDATE()");
             builder.Property(u => u.Status).HasColumnName("User_Status").IsRequired().HasMaxLength(20).HasDefaultValue("Offline").IsUnicode(true);
 
+            // Add unique constraints
+            builder.HasIndex(u => u.Username).IsUnique();
+            builder.HasIndex(u => u.Email).IsUnique();
+
             // Configuring relationships
             builder.HasMany(u => u.SentMessages)
                 .WithOne(m => m.Sender)

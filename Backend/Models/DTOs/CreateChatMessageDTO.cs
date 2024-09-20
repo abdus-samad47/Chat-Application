@@ -2,9 +2,10 @@
 {
     public class CreateChatMessageDTO
     {
-        public string MessageText { get; set; } = null!;
+        public string MessageText { get; set; }
+        public int SenderId { get; set; }
+        public int? ReceiverId { get; set; }
+        public int? ChatRoomId { get; set; }
         public DateTime SentAt { get; set; }
-        public int UserId { get; set; }
-        public int ChatRoomId { get; set; }
     }
 }

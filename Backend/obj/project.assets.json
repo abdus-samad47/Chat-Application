@@ -3583,11 +3583,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Real-Time Chat Application\\Real-Time Chat Application.csproj",
+      "projectUniqueName": "C:\\Real-Time Chat Application\\Backend\\Real-Time Chat Application.csproj",
       "projectName": "Real-Time Chat Application",
-      "projectPath": "C:\\Real-Time Chat Application\\Real-Time Chat Application.csproj",
+      "projectPath": "C:\\Real-Time Chat Application\\Backend\\Real-Time Chat Application.csproj",
       "packagesPath": "C:\\Users\\Abdul Raffay\\.nuget\\packages\\",
-      "outputPath": "C:\\Real-Time Chat Application\\obj\\",
+      "outputPath": "C:\\Real-Time Chat Application\\Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Abdul Raffay\\AppData\\Roaming\\NuGet\\NuGet.Config",

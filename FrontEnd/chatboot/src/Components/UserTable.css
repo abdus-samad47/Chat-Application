@@ -1,0 +1,86 @@
+table{
+    border: 1px, solid, black;
+    margin-left: 40%;
+    text-align: center;
+}
+
+thead{
+    background-color: blue;
+    color: white;
+}
+th{
+    padding: 10px;
+    font-size: large;
+}
+body{
+    text-align: center;
+}
+tbody{
+    background-color: aquamarine;
+    overflow: scroll;
+}
+.sidebar{
+    border: 2px solid green;
+    width: 100px;
+}
+.sidebar > h3{
+    font-size: x-large;
+    width: 100%;
+    background-color: green;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: white;
+}
+.sidebar > div{
+    background-color: lightgreen;
+    border: 1px solid green;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: medium;
+    font-family: 'Times New Roman', Times, serif;
+}
+.chat-window{
+    border: 2px solid green;
+    width: 100px;
+}
+.chat-window > h3{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: x-large;
+    width: 98%;
+    background-color: green;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: white;
+    padding-left: 30px;
+}
+.logout{
+    padding-right: 50px;
+}
+.chat-window > div{
+    background-color: lightyellow;
+    border: 1px solid green;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: medium;
+    font-family: 'Times New Roman', Times, serif;
+}
+.chat-window > button{
+    background-color: green;
+    color: white;
+    padding: 10px 15px;
+}
+.chat-window > input{
+    height: 30px;
+    width: 70%;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+sp{
+    margin-left: 100;
+}
