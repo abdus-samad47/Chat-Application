@@ -21,11 +21,17 @@ const Login = () => {
         Password: password
       });
       
+      const token = response.data.token;
+      console.log(token)
+      
+      localStorage.setItem('jwtToken', null)
+      localStorage.setItem('jwtToken', token)
       setSuccess('Login successful!');
       
       // Assuming a successful response includes user data
-      localStorage.setItem('user', JSON.stringify(response.data));
-      const {userId} = response.data;
+      localStorage.setItem('user', JSON.stringify(response.data.userDTO));
+      const {userId} = response.data.userDTO;
+      console.log(userId);
 
       // Redirect or handle successful login
       navigate(`/chat/${userId}`); 

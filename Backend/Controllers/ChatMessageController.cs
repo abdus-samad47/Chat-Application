@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Real_Time_Chat_Application.Data;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 
 namespace Real_Time_Chat_Application.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ChatMessagesController : ControllerBase

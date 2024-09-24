@@ -11,19 +11,36 @@ const ChatPage = () => {
     const [newMessage, setNewMessage] = useState('');
     const roomId = null;
     const sender = Number(userId);
-
+    const token = localStorage.getItem('jwtToken');
+    
     useEffect(() => {
         const fetchUsers = async () => {
-            const response = await axios.get('http://localhost:5268/api/Users/');
+            try{
+                console.log(token);
+            const response = await axios.get('http://localhost:5268/api/Users/',{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            console.log(response)
             setUsers(response.data);
-        };
-        fetchUsers();
-    }, []);
+            }catch(err){
+                console.log("Error fetching user", err.response ? err.response.data : err.message)
+            }};
+        if(token){
+
+            fetchUsers();
+        }
+    }, [token]);
 
     const handleUserSelect = async (userId) => {
         setSelectedUserId(userId);
         try{
-            const response = await axios.get(`http://localhost:5268/api/ChatMessages/conversation?receiverId=${userId}&senderId=${sender}`);
+            const response = await axios.get(`http://localhost:5268/api/ChatMessages/conversation?receiverId=${userId}&senderId=${sender}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             setMessages(response.data);
         }
         catch(err){
@@ -41,10 +58,19 @@ const ChatPage = () => {
             chatRoomId: roomId,
         };
 
-        await axios.post('http://localhost:5268/api/ChatMessages/', message);
+        await axios.post('http://localhost:5268/api/ChatMessages/', message, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         setMessages([...messages, message]);
         setNewMessage('');
     };
+
+    const handleLogout = () => {
+        localStorage.removeItem('jwtToken')
+        window.location.href = '/login';
+    }
 
     return (
         <div className="chat-page" style={{ display: 'flex' }}>
@@ -57,7 +83,7 @@ const ChatPage = () => {
                 ))}
             </div>
             <div className="chat-window" style={{ flex: 1, padding: '10px' }}>
-                <h3>Chat <span className='logout'><button>Logout</button></span></h3>
+                <h3>Chat <span className='logout'><button onClick={handleLogout}>Logout</button></span></h3>
                 <div className="messages" style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px' }}>
                     {messages.map((msg, index) => (
                         <div key={index}>{msg.senderId === sender? "You: " : "User: "} {msg.messageText}</div>

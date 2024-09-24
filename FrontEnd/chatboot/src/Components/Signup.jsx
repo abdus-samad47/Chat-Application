@@ -25,6 +25,7 @@ const Signup = () => {
       });
 
       // Handle successful response
+      const token = response.data.token;
       setSuccess('Signup successful! Please log in.');
       setShowLoginButton(true);  // Show the login button
       setError('');

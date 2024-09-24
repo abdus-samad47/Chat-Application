@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Real_Time_Chat_Application.Data;
 using Real_Time_Chat_Application.Entities;
 using Real_Time_Chat_Application.Models.DTOs;
 using Real_Time_Chat_Application.Utility;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Real_Time_Chat_Application.Controllers
 {
@@ -15,14 +20,17 @@ namespace Real_Time_Chat_Application.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly string _secretKey;
 
-        public UsersController(ApplicationDbContext context, IMapper mapper)
+        public UsersController(ApplicationDbContext context, IMapper mapper, string secretKey)
         {
             _context = context;
             _mapper = mapper;
+            _secretKey = secretKey;
         }
 
         // GET: api/Users
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
@@ -31,6 +39,7 @@ namespace Real_Time_Chat_Application.Controllers
         }
 
         // GET: api/Users/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<VerifyUserDTO>> GetUser(int id)
         {
@@ -58,19 +67,39 @@ namespace Real_Time_Chat_Application.Controllers
 
             var hashedPassword = Hashing.hashPassword(verifyUserDTO.Password, user.Salt);
             var verify = Hashing.VerifyPassword(verifyUserDTO.Password, user.PasswordHash, user.Salt);
+            var token = GenerateJwtToken(user);
 
             if (verify)
             {
-                // Map and return the user data
                 var userDto = _mapper.Map<UserDTO>(user);
-                return Ok(userDto);
+                return Ok(new { UserDTO = userDto, Token = token });
             }
             else
             {
                 return BadRequest("Invalid Username or Password");
             }
+        }
+        private string GenerateJwtToken(User user)
+        {
+            // Define claims
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
 
-            // If successful, return user data (or a token if using authentication tokens)
+            // Create signing key
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("We_Connect_Private_Limited_12345"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            // Create the token
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddYears(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
 
@@ -96,9 +125,13 @@ namespace Real_Time_Chat_Application.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            var userDto = _mapper.Map<UserDTO>(user);
+
             return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, _mapper.Map<UserDTO>(user));
         }
+        
 
+        [Authorize]
         // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, UpdateUserDTO updateUserDTO)
@@ -109,7 +142,6 @@ namespace Real_Time_Chat_Application.Controllers
                 return NotFound();
             }
 
-            // Map updated fields to the existing user
             _mapper.Map(updateUserDTO, user);
 
             // Mark the entity as modified
@@ -120,6 +152,7 @@ namespace Real_Time_Chat_Application.Controllers
         }
 
         // DELETE: api/Users/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
