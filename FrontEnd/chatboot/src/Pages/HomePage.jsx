@@ -11,7 +11,7 @@ const HomePage = () => {
       };
     return (
     <>
-    <h1>Home Page</h1>;
+    <h1>Home Page</h1>
     <button onClick={handleLoginRedirect}>Login</button>
     <button onClick={handleSignupRedirect}>Signup</button>
 

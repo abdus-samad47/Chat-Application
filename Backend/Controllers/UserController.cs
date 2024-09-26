@@ -30,7 +30,7 @@ namespace Real_Time_Chat_Application.Controllers
         }
 
         // GET: api/Users
-        
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
@@ -84,8 +84,8 @@ namespace Real_Time_Chat_Application.Controllers
             // Define claims
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.UserId.ToString()),
+                //new Claim(ClaimTypes.Name, user.Username)
             };
 
             // Create signing key
@@ -95,7 +95,7 @@ namespace Real_Time_Chat_Application.Controllers
             // Create the token
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddYears(1),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds
             );
 

@@ -11,18 +11,18 @@ const ChatPage = () => {
     const [newMessage, setNewMessage] = useState('');
     const roomId = null;
     const sender = Number(userId);
-    const token = localStorage.getItem('jwtToken');
+    const token = sessionStorage.getItem('jwtToken');
+    const userjson = sessionStorage.getItem('user');
+    const userInfo = JSON.parse(userjson);
     
     useEffect(() => {
         const fetchUsers = async () => {
             try{
-                console.log(token);
             const response = await axios.get('http://localhost:5268/api/Users/',{
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log(response)
             setUsers(response.data);
             }catch(err){
                 console.log("Error fetching user", err.response ? err.response.data : err.message)
@@ -68,7 +68,8 @@ const ChatPage = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('jwtToken')
+        sessionStorage.removeItem('jwtToken')
+        sessionStorage.removeItem('user')
         window.location.href = '/login';
     }
 
@@ -83,7 +84,7 @@ const ChatPage = () => {
                 ))}
             </div>
             <div className="chat-window" style={{ flex: 1, padding: '10px' }}>
-                <h3>Chat <span className='logout'><button onClick={handleLogout}>Logout</button></span></h3>
+                <h3>Chat <span>{userInfo.username}</span> <span className='logout'><button onClick={handleLogout}>Logout</button></span></h3>
                 <div className="messages" style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px' }}>
                     {messages.map((msg, index) => (
                         <div key={index}>{msg.senderId === sender? "You: " : "User: "} {msg.messageText}</div>

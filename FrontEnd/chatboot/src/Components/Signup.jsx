@@ -13,8 +13,24 @@ const Signup = () => {
   const [showLoginButton, setShowLoginButton] = useState(false);
   const navigate = useNavigate();
 
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(!emailRegex.test(email)){
+      setError("Invalid Email");
+      return false;
+    }
+    if(password.length < 6){
+      setError("Minimum password length should be 6 characters");
+      return false;
+    }
+    setError("");
+    return true;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if(!validateForm()) return;
     try {
       // Make API call to create a user
       const response = await axios.post('http://localhost:5268/api/Users', {
@@ -24,12 +40,9 @@ const Signup = () => {
         PasswordHash: password
       });
 
-      // Handle successful response
-      const token = response.data.token;
       setSuccess('Signup successful! Please log in.');
-      setShowLoginButton(true);  // Show the login button
+      setShowLoginButton(true);
       setError('');
-      // Optionally clear the form
       setUsername('');
       setEmail('');
       setPhoneNumber('');

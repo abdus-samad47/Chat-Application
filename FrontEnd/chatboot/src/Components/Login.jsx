@@ -24,12 +24,11 @@ const Login = () => {
       const token = response.data.token;
       console.log(token)
       
-      localStorage.setItem('jwtToken', null)
-      localStorage.setItem('jwtToken', token)
+      sessionStorage.setItem('jwtToken', token)
       setSuccess('Login successful!');
       
       // Assuming a successful response includes user data
-      localStorage.setItem('user', JSON.stringify(response.data.userDTO));
+      sessionStorage.setItem('user', JSON.stringify(response.data.userDTO));
       const {userId} = response.data.userDTO;
       console.log(userId);
 
