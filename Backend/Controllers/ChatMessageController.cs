@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Real_Time_Chat_Application.Data;
 using Real_Time_Chat_Application.Entities;
 using Real_Time_Chat_Application.Models;
 using Real_Time_Chat_Application.Models.DTOs;
+using Real_Time_Chat_Application.Utility;
 using System.Security.Claims;
 
 namespace Real_Time_Chat_Application.Controllers
@@ -108,6 +110,12 @@ namespace Real_Time_Chat_Application.Controllers
 
             _context.ChatMessages.Add(message);
             await _context.SaveChangesAsync();
+
+            if (message.ReceiverId != null)
+            {
+                var chatHubContext = HttpContext.RequestServices.GetService<IHubContext<ChatHub>>();
+                await chatHubContext.Clients.User(message.ReceiverId.ToString()).SendAsync("ReceiveMessage", message);
+            }
 
             return CreatedAtAction(nameof(GetChatMessages), new { id = message.MessageId }, _mapper.Map<ChatMessageDTO>(message));
         }
