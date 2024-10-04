@@ -1,0 +1,105 @@
+.model-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    width: 100%;
+}
+
+.modal-content {
+    background-color: #fff; /* White background for the modal */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    width: 100%; /* Set width */
+    padding: 20px; /* Inner spacing */
+    position: relative; /* For positioning the close button */
+}
+
+form{
+    width: 100%;
+    margin-top  : -10px;
+    height: 100%;
+}
+
+form > input{
+    margin-top: 10px;
+    background-color: lightcyan;
+    width: 80%;
+}
+
+form > h3{
+    color: #f0f0f0;
+}
+
+.modal-title {
+    font-size: 24px; /* Larger font size for the title */
+    color: #333; /* Dark text color */
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #ff0000; /* Red for close button */
+    cursor: pointer;
+}
+
+.input-field {
+    width: 100%; /* Full width */
+    padding: 12px; /* Padding inside */
+    margin-bottom: 15px; /* Space between fields */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.user-list {
+    max-height: 150px; /* Limit height */
+    overflow-y: auto; /* Enable scrolling */
+    margin-bottom: 15px; /* Space below */
+    border: 1px solid #ccc; /* Border around user list */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.user-item {
+    padding: 10px; /* Padding inside user items */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.2s; /* Smooth transition */
+}
+
+.user-item:hover {
+    background-color: #f0f0f0; /* Light grey on hover */
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+}
+
+.submit-button {
+    background-color: #007bff; /* Primary color */
+    color: white;
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px 20px; /* Button padding */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.submit-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+.cancel-button {
+    background: none;
+    border: none;
+    color: #555; /* Grey for cancel */
+    margin-left: 10px; /* Space between buttons */
+    cursor: pointer; /* Pointer cursor */
+}

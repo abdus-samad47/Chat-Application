@@ -6,6 +6,10 @@ namespace Real_Time_Chat_Application.Models
 {
     public class ChatMessage
     {
+        //internal int? receiverId;
+        //internal int senderId;
+        //internal string messageText;
+
         public int MessageId { get; set; }
         public string MessageText { get; set; }
         public int SenderId { get; set; }
@@ -17,7 +21,7 @@ namespace Real_Time_Chat_Application.Models
         public User Sender { get; set; }
 
         [ForeignKey("ReceiverId")]
-        public User Receiver { get; set; }
+        public User RoomId { get; set; }
 
         [ForeignKey("ChatRoomId")]
         public ChatRoom ChatRoom { get; set; }

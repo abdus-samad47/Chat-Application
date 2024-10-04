@@ -1,7 +1,7 @@
 import './App.css';
 import { Navigate, BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './Components/Login';
-import Signup from './Components/Signup';
+import Login from './Pages/Login';
+import Signup from './Pages/Signup';
 // import UserPage from './Pages/UserPage';
 import HomePage from './Pages/HomePage';
 // import UserPage from './Pages/FetchUserById';

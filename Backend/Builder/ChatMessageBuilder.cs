@@ -25,7 +25,7 @@ namespace Real_Time_Chat_Application.Builder
                 .HasForeignKey(m => m.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(m => m.Receiver)
+            builder.HasOne(m => m.RoomId)
                 .WithMany(u => u.ReceivedMessages)
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);

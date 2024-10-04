@@ -11,7 +11,7 @@ namespace Real_Time_Chat_Application.Models
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; }
 
-        [ForeignKey("UserId")]
+        [ForeignKey("CreatedBy")]
         public User Creator { get; set; }
         public ICollection<ChatMessage>? Messages { get; set; }
         public ICollection<ChatRoomUser>? ChatRoomUsers { get; set; }

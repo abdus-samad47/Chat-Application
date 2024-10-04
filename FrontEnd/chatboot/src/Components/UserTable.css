@@ -23,17 +23,27 @@ tbody{
     border: 2px solid green;
     width: 100px;
 }
+.list-of-users{
+    height: 50%;
+    overflow-y: auto;
+    margin-top: 55px;
+    margin-bottom: 8px;
+}
+
 .sidebar > h3{
     font-size: x-large;
     width: 100%;
     background-color: green;
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 100px;
     padding-top: 10px;
     padding-bottom: 10px;
     color: white;
+    position: fixed;
+    width: 21.7%;
+    z-index: 1000;
 }
-.sidebar > div{
+.list-of-users > div{
     background-color: lightgreen;
     border: 1px solid green;
     padding-top: 5px;
@@ -41,6 +51,10 @@ tbody{
     font-size: medium;
     font-family: 'Times New Roman', Times, serif;
 }
+.list-of-groups{
+    margin-top: 30px;
+}
+
 .chat-window{
     border: 2px solid green;
     width: 100px;

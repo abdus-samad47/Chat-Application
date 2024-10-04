@@ -1,58 +1,83 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.IdentityModel.Tokens;
-using System.Threading.Tasks;
+using Real_Time_Chat_Application.Models.DTOs;
+using Real_Time_Chat_Application.Models;
+using Real_Time_Chat_Application.Data;
+using System.Security.Claims;
 
-public class ChatHub : Hub
+namespace Real_Time_Chat_Application.Hubs
 {
-        private readonly ILogger<ChatHub> _logger;
-        
-    public ChatHub (ILogger<ChatHub> logger)
+    public class ChatHub : Hub
     {
-        _logger = logger;
-    }
-    public override async Task OnConnectedAsync()
-    {
+        private readonly ApplicationDbContext _context;
 
-        // Log the user's connection
-        var userId = Context.UserIdentifier;
-
-        _logger.LogInformation($"User connected with UserIdentifier: {userId}");
-
-        if (userId != null)
+        //private static readonly Dictionary<string, string> _connections = new();
+        public ChatHub(ApplicationDbContext context)
         {
-            // Optional: Notify the user that they are connected
-            await Clients.Caller.SendAsync("Connected", $"You are connected as user {userId}");
-        }
-        await base.OnConnectedAsync();
-    }
-
-    public async Task SendMessage( int receiverId, string messageText)
-    {
-        // Ensure the user identifier is set
-        var senderId = Context.UserIdentifier;
-        if (senderId == null)
-        {
-            throw new HubException("User identifier is null.");
+            _context = context;
         }
 
-        // You may want to save the message to the database here
-        // var message = new ChatMessage { SenderId = int.Parse(senderId), ReceiverId = receiverId, MessageText = messageText, SentAt = DateTime.Now };
-        //_context.ChatMessages.Add(message);
-        //await _context.SaveChangesAsync();
+        //public override Task OnConnectedAsync()
+        //{
+        //    var userId = Context.UserIdentifier;
 
-        // Send the message to the intended recipient
-        await Clients.User(receiverId.ToString()).SendAsync("ReceiveMessage", messageText, senderId);
-    }
+        //    if (userId != null)
+        //    {
+        //        _connections[userId] = Context.ConnectionId;
+        //    }
 
-    public override async Task OnDisconnectedAsync(Exception exception)
-    {
-        // Log the user's disconnection
-        var userId = Context.UserIdentifier;
-        if (userId != null)
+        //    return base.OnConnectedAsync();
+        //}
+
+        //public override Task OnDisconnectedAsync(Exception exception)
+        //{
+        //    var userId = Context.UserIdentifier;
+
+        //    if (userId != null)
+        //    {
+        //        _connections.Remove(userId);
+        //    }
+
+        //    return base.OnDisconnectedAsync(exception);
+        //}
+
+        public async Task SendMessage(CreateChatMessageDTO createChatMessageDTO)
         {
-            // Optional: Notify other users that this user has disconnected
-            await Clients.All.SendAsync("UserDisconnected", userId);
+            //var senderId = createChatMessageDTO.SenderId.ToString();
+
+            //var receiverId = createChatMessageDTO.ReceiverId;
+
+            //var userId = Context.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+
+            //if (!_connections.ContainsKey(senderId))
+            //{
+            //    Console.Error.WriteLine($"User {senderId} is not connected.");
+            //    return;
+            //}
+
+            try
+            {
+                var message = new ChatMessage
+                {
+                    MessageText = createChatMessageDTO.MessageText,
+                    SenderId = createChatMessageDTO.SenderId,
+                    ReceiverId = int.Parse(createChatMessageDTO.ReceiverId),
+                    SentAt = createChatMessageDTO.SentAt
+                };
+
+                await _context.ChatMessages.AddAsync(message);
+                await _context.SaveChangesAsync();
+
+                Console.WriteLine($"Sending message: {message.MessageText} from {message.SenderId} to {message.ReceiverId}");
+
+                //await Clients.User(receiverId).SendAsync("ReceiveMessage", createChatMessageDTO.MessageText);
+
+                await Clients.All.SendAsync("ReceiveMessage", message);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error in SendMessage: {ex.Message}");
+                throw;
+            }
         }
-        await base.OnDisconnectedAsync(exception);
     }
 }

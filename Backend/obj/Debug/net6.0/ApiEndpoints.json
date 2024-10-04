@@ -93,6 +93,73 @@
     ]
   },
   {
+    "ContainingType": "Real_Time_Chat_Application.Controllers.ChatMessagesController",
+    "Method": "GetGroupConversation",
+    "RelativePath": "api/ChatMessages/groupConversation",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "senderId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "roomId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Real_Time_Chat_Application.Models.DTOs.ChatMessageDTO, Real-Time Chat Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Real_Time_Chat_Application.Controllers.ChatRoomController",
+    "Method": "GetChatRooms",
+    "RelativePath": "api/ChatRoom",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Real_Time_Chat_Application.Models.ChatRoom, Real-Time Chat Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Real_Time_Chat_Application.Controllers.ChatRoomController",
+    "Method": "CreateChatRoom",
+    "RelativePath": "api/ChatRoom",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createChatRoomDTO",
+        "Type": "Real_Time_Chat_Application.Models.DTOs.CreateChatRoomDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Real_Time_Chat_Application.Controllers.UsersController",
     "Method": "GetUsers",
     "RelativePath": "api/Users",

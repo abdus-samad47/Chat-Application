@@ -2,14 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Real_Time_Chat_Application.Data;
 using Real_Time_Chat_Application.Entities;
 using Real_Time_Chat_Application.Models.DTOs;
 using Real_Time_Chat_Application.Utility;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Real_Time_Chat_Application.Controllers
 {
@@ -20,13 +16,14 @@ namespace Real_Time_Chat_Application.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly string _secretKey;
+        private readonly Token _token;
 
-        public UsersController(ApplicationDbContext context, IMapper mapper, string secretKey)
+
+        public UsersController(ApplicationDbContext context, IMapper mapper, Token token)
         {
             _context = context;
             _mapper = mapper;
-            _secretKey = secretKey;
+            _token = token;
         }
 
         // GET: api/Users
@@ -67,41 +64,18 @@ namespace Real_Time_Chat_Application.Controllers
 
             var hashedPassword = Hashing.hashPassword(verifyUserDTO.Password, user.Salt);
             var verify = Hashing.VerifyPassword(verifyUserDTO.Password, user.PasswordHash, user.Salt);
-            var token = GenerateJwtToken(user);
+            var bearertoken = _token.GenerateJwtToken(user);
 
             if (verify)
             {
                 var userDto = _mapper.Map<UserDTO>(user);
-                return Ok(new { UserDTO = userDto, Token = token });
+                return Ok(new { UserDTO = userDto, Token = bearertoken });
             }
             else
             {
                 return BadRequest("Invalid Username or Password");
             }
         }
-        private string GenerateJwtToken(User user)
-        {
-            // Define claims
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, user.UserId.ToString()),
-                //new Claim(ClaimTypes.Name, user.Username)
-            };
-
-            // Create signing key
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("We_Connect_Private_Limited_12345"));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            // Create the token
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
 
         // POST: api/Users
         [HttpPost]

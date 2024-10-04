@@ -6,10 +6,21 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Real_Time_Chat_Application.Utility;
+using Real_Time_Chat_Application.Hubs;
+using System.Security.Claims;
+using Real_Time_Chat_Application.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddScoped<ChatRoomRepository>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+     {
+         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+     });
+
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -17,8 +28,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //builder.Services.AddScoped<UserRepository>();
 //builder.Services.AddScoped<ChatMessageRepository>();
 
-var secretKey = "We_Connect_Private_Limited_12345";
-builder.Services.AddSingleton(secretKey);
+builder.Services.AddSingleton<Token>();
+
+var secretKey = builder.Configuration["Jwt:Key"];
 
 builder.Services.AddAuthentication(x =>
 {
@@ -34,13 +46,32 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
     };
+    x.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = context =>
+        {
+            // Assuming your token has a "sub" claim that contains the user ID
+            var userId = context.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            return Task.CompletedTask;
+        }
+    };
 });
 
-builder.Services.AddSignalR();
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAll",
+//        builder =>
+//        {
+//            builder.AllowAnyOrigin()
+//                   .AllowAnyMethod()
+//                   .AllowAnyHeader();
+//        });
+//});
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
+    options.AddPolicy("ReactApp",
         policy =>
         {
             policy.WithOrigins("http://localhost:3000")
@@ -63,7 +94,8 @@ app.Urls.Add("http://localhost:5268");
 
 app.UseRouting();
 
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("ReactApp");
+//app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
 {
@@ -77,8 +109,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapHub<ChatHub>("/chathub");
-
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

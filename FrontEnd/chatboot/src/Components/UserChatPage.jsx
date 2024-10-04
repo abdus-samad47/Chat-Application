@@ -2,19 +2,24 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
+import CreateGroupModel from './CreateGroupModel';
 import './UserTable.css';
 
 const ChatPage = () => {
     const { userId } = useParams();
     const [users, setUsers] = useState([]);
+    const [groups, setGroups] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
+    const [selectedGroupId, setSelectedGroupId] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const sender = Number(userId);
     const token = sessionStorage.getItem('jwtToken');
     const userjson = sessionStorage.getItem('user');
     const userInfo = JSON.parse(userjson);
+    const senderId = userInfo.userId
     const [connection, setConnection] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Fetch users on component mount
     useEffect(() => {
@@ -25,14 +30,30 @@ const ChatPage = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                setUsers(response.data);
+                console.log("Fetched users:", response.data.$values);
+                setUsers(response.data.$values);
             } catch (err) {
                 console.error("Error fetching users:", err.response ? err.response.data : err.message);
             }
         };
 
+        const fetchGroups = async () => {
+            try {
+                const response = await axios.get('http://localhost:5268/api/ChatRoom', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                console.log("Fetched groups:", response.data);
+                setGroups(response.data.$values);
+            } catch (err) {
+                console.error("Error fetching groups:", err.response ? err.response.data : err.message);
+            }
+        };
+
         if (token) {
             fetchUsers();
+            fetchGroups();
         }
     }, [token]);
 
@@ -53,9 +74,28 @@ const ChatPage = () => {
                 await newConnection.start();
                 console.log('Connected to SignalR hub');
 
+                console.log("SignalR Connection State:", newConnection.state);
+
+                console.log("signalR connectionId: ", newConnection.connectionId);
+                
+                if (newConnection.state === HubConnectionState.Connected) {
+                    console.log('Connection is established.');
+                } else {
+                    console.error('Connection not established:', newConnection.state);
+                }
+
                 // Listen for incoming messages
                 newConnection.on('ReceiveMessage', (message) => {
-                    setMessages((prevMessages) => [...prevMessages, message]);
+                    try{
+                        const receiver = Number(message.receiverId);
+                        if ((receiver === selectedUserId && message.senderId === senderId) || (receiver === senderId && message.senderId === selectedUserId)){
+                            console.log("Message Received: ", message)
+                            setMessages((prevMessages) => [...prevMessages, message]);
+                        }
+                    }
+                    catch(error){
+                        console.log("Error catching receiving message ", error);
+                    }
                 });
             } catch (error) {
                 console.error('Connection failed: ', error);
@@ -66,9 +106,11 @@ const ChatPage = () => {
 
         // Cleanup on unmount
         return () => {
-            newConnection.stop();
+            if(newConnection){
+                newConnection.stop();
+            }
         };
-    }, []);
+    }, [selectedUserId, senderId]);
 
     // Handle user selection and fetch conversation
     const handleUserSelect = async (userId) => {
@@ -79,11 +121,15 @@ const ChatPage = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setMessages(response.data);
+            setMessages(response.data.$values);
         } catch (err) {
             console.error("Error fetching conversation:", err);
         }
     };
+
+    const handleGroupSelect = async (selectedGroupId) => {
+        const response = await axios.get()
+    }
 
     // Send a message via SignalR
     const sendMessage = async () => {
@@ -91,10 +137,13 @@ const ChatPage = () => {
 
         const message = {
             messageText: newMessage,
-            senderId: sender,
-            receiverId: selectedUserId,
+            senderId: senderId,
+            receiverId: `${selectedUserId}`,
             sentAt: new Date().toISOString() 
         };
+
+            console.log(message.senderId);
+            console.log(message.receiverId);
 
         // Ensure the connection is started
         if (connection.state === HubConnectionState.Disconnected) {
@@ -108,11 +157,26 @@ const ChatPage = () => {
 
         // Send message through SignalR
         try {
-            await connection.invoke('SendMessage', selectedUserId, newMessage);
+            console.log(message);
+            await connection.invoke('SendMessage', message);
             console.log("Message sent:", newMessage);
             setNewMessage('');
         } catch (error) {
             console.error("Error sending message:", error);
+        }
+    };
+
+    const handleCreateGroup = async (requestBody) => {
+        try {
+            const response = await axios.post('http://localhost:5268/api/ChatRoom', requestBody, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            console.log("Group created successfully:", response.data);
+        } catch (error) {
+            console.error("Error creating group:", error);
         }
     };
 
@@ -124,13 +188,26 @@ const ChatPage = () => {
 
     return (
         <div className="chat-page" style={{ display: 'flex' }}>
-            <div className="sidebar" style={{ width: '20%', borderRight: '1px solid #ccc', padding: '10px' }}>
+            <div className="sidebar" style={{ width: '22%', borderRight: '1px solid #ccc', padding: '10px' }}>
                 <h3>Users</h3>
+                <div className='list-of-users'>
                 {users.map(user => (
                     <div key={user.userId} onClick={() => handleUserSelect(user.userId)} style={{ cursor: 'pointer' }}>
                         {user.username}
                     </div>
                 ))}
+                </div>
+                <h3>Chat Groups</h3>
+                <div className='list-of-groups'>
+                <button onClick={() => setIsModalOpen(true)}>+ Create Group</button>
+                <div className="group-list">
+                        {groups.map(group => (
+                            <div key={group.id} style={{ padding: '5px', border: '1px solid #ccc', marginTop: '5px' }}>
+                                {group.roomName}
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
             <div className="chat-window" style={{ flex: 1, padding: '10px' }}>
                 <h3>Chat <span>{userInfo.username}</span> <span className='logout'><button onClick={handleLogout}>Logout</button></span></h3>
@@ -147,6 +224,13 @@ const ChatPage = () => {
                 />
                 <button onClick={sendMessage} style={{ width: '15%' }}>Send</button>
             </div>
+            <CreateGroupModel 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                onSubmit={handleCreateGroup}
+                users={users}
+                createdBy={userInfo.userId}
+            />
         </div>
     );
 };

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Real_Time_Chat_Application.Data;
 using Real_Time_Chat_Application.Entities;
+using Real_Time_Chat_Application.Hubs;
 using Real_Time_Chat_Application.Models;
 using Real_Time_Chat_Application.Models.DTOs;
 using Real_Time_Chat_Application.Utility;
@@ -26,6 +27,7 @@ namespace Real_Time_Chat_Application.Controllers
             _mapper = mapper;
         }
 
+        //[Authorize]
         // GET: api/ChatMessages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ChatMessageDTO>>> GetChatMessages()
@@ -69,12 +71,13 @@ namespace Real_Time_Chat_Application.Controllers
         //    return Ok(messageDtos);
         //}
 
+        //[Authorize]
         [HttpGet("conversation")]
         public async Task<ActionResult<IEnumerable<ChatMessageDTO>>> GetConversation(int receiverId, int senderId)
         {
             var messages = await _context.ChatMessages
                 .Include(m => m.Sender)
-                .Include(m => m.Receiver)
+                .Include(m => m.RoomId)
                 .Where(m => (m.SenderId == senderId && m.ReceiverId == receiverId) ||
                              (m.SenderId == receiverId && m.ReceiverId == senderId))
                 .ToListAsync();
@@ -87,9 +90,26 @@ namespace Real_Time_Chat_Application.Controllers
             return Ok(_mapper.Map<IEnumerable<ChatMessageDTO>>(messages));
         }
 
+        [HttpGet("groupConversation")]
+        public async Task<ActionResult<IEnumerable<ChatMessageDTO>>> GetGroupConversation(int senderId, int roomId)
+        {
+            var messages = await _context.ChatMessages
+                .Include(m => m.Sender)
+                .Include(m => m.RoomId)
+                .Where(m => (m.SenderId == senderId && m.ChatRoomId == roomId))
+                .ToListAsync();
 
-        // POST: api/ChatMessages
-        [HttpPost]
+            if (messages == null || !messages.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<ChatMessageDTO>>(messages));
+        }
+
+        //[Authorize]
+        //POST: api/ChatMessages
+       [HttpPost]
         public async Task<ActionResult<ChatMessageDTO>> PostChatMessage(CreateChatMessageDTO createChatMessageDTO)
         {
             if (!ModelState.IsValid)
@@ -108,13 +128,13 @@ namespace Real_Time_Chat_Application.Controllers
                 }
             }
 
-            _context.ChatMessages.Add(message);
+            await _context.ChatMessages.AddAsync(message);
             await _context.SaveChangesAsync();
 
             if (message.ReceiverId != null)
             {
                 var chatHubContext = HttpContext.RequestServices.GetService<IHubContext<ChatHub>>();
-                await chatHubContext.Clients.User(message.ReceiverId.ToString()).SendAsync("ReceiveMessage", message);
+                await chatHubContext.Clients.User(message.ReceiverId.ToString()).SendAsync("ReceiveMessage", message.SenderId, message.MessageText);
             }
 
             return CreatedAtAction(nameof(GetChatMessages), new { id = message.MessageId }, _mapper.Map<ChatMessageDTO>(message));

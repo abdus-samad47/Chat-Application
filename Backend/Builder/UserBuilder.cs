@@ -32,7 +32,7 @@ namespace Real_Time_Chat_Application.Builder
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(u => u.ReceivedMessages)
-                .WithOne(m => m.Receiver)
+                .WithOne(m => m.RoomId)
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
 

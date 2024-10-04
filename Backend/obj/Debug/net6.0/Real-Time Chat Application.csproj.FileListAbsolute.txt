@@ -165,8 +165,6 @@ C:\Real-Time Chat Application\obj\Debug\net6.0\Real-Time Chat Application.genrun
 C:\Real-Time Chat Application\obj\Debug\net6.0\ref\Real-Time Chat Application.dll
 C:\Real-Time Chat Application\Backend\bin\Debug\net6.0\appsettings.Development.json
 C:\Real-Time Chat Application\Backend\bin\Debug\net6.0\appsettings.json
-C:\Real-Time Chat Application\Backend\bin\Debug\net6.0\FrontEnd\chatboot\package-lock.json
-C:\Real-Time Chat Application\Backend\bin\Debug\net6.0\FrontEnd\chatboot\package.json
 C:\Real-Time Chat Application\Backend\bin\Debug\net6.0\Real-Time Chat Application.staticwebassets.runtime.json
 C:\Real-Time Chat Application\Backend\bin\Debug\net6.0\Real-Time Chat Application.exe
 C:\Real-Time Chat Application\Backend\bin\Debug\net6.0\Real-Time Chat Application.deps.json
