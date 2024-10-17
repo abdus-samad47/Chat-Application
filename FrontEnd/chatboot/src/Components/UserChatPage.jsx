@@ -8,18 +8,22 @@ import './UserTable.css';
 const ChatPage = () => {
     const { userId } = useParams();
     const [users, setUsers] = useState([]);
-    const [groups, setGroups] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
+    const [selectedUsername, setSelectedUsername] = useState(null)
+    const [groups, setGroups] = useState([]);
+    const [groupUsers, setGroupUsers] = useState([]);
     const [selectedGroupId, setSelectedGroupId] = useState(null);
+    const [selectedGroupName, setSelectedGroupName] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const sender = Number(userId);
     const token = sessionStorage.getItem('jwtToken');
     const userjson = sessionStorage.getItem('user');
     const userInfo = JSON.parse(userjson);
-    const senderId = userInfo.userId
+    const senderId = userInfo.userId;
     const [connection, setConnection] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
 
     // Fetch users on component mount
     useEffect(() => {
@@ -36,10 +40,10 @@ const ChatPage = () => {
                 console.error("Error fetching users:", err.response ? err.response.data : err.message);
             }
         };
-
+        
         const fetchGroups = async () => {
             try {
-                const response = await axios.get('http://localhost:5268/api/ChatRoom', {
+                const response = await axios.get(`http://localhost:5268/api/ChatRoom/user/${senderId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -51,11 +55,26 @@ const ChatPage = () => {
             }
         };
 
+        const fetchGroupUsers = async () => {
+            try{
+                const response = await axios.get(`http://localhost:5268/api/ChatRoom/room/${selectedGroupId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                console.log("Fetched group users: ", response.data.$values);
+                setGroupUsers(response.data.$values);
+            } catch (err) {
+                console.error("Error fetching group users: ", err.response ? err.response.data : err.message);
+            }
+        }
+
         if (token) {
             fetchUsers();
             fetchGroups();
+            fetchGroupUsers();
         }
-    }, [token]);
+    }, [token, senderId, selectedGroupId]);
 
     // Initialize SignalR connection
     useEffect(() => {
@@ -90,6 +109,18 @@ const ChatPage = () => {
                         const receiver = Number(message.receiverId);
                         if ((receiver === selectedUserId && message.senderId === senderId) || (receiver === senderId && message.senderId === selectedUserId)){
                             console.log("Message Received: ", message)
+                            console.log("Message Received By: ", message.senderUsername)
+                            // senderUsername = message.senderUsername;
+                            // receiverUsername = message.receiverUsername;
+                            const updatedMessage = {
+                                ...message,
+                                displayText: senderId === message.senderId 
+                                    ? `${message.senderUsername}: ${message.messageText}` 
+                                    : `${message.receiverUsername}: ${message.messageText}` // Format for display
+                            };
+                            console.log(`${message.senderUsername}: ${message.messageText}`)
+                            setMessages((prevMessages) => [...prevMessages, updatedMessage]);
+                        }else if (selectedGroupId && message.chatRoomId === selectedGroupId) {
                             setMessages((prevMessages) => [...prevMessages, message]);
                         }
                     }
@@ -110,11 +141,14 @@ const ChatPage = () => {
                 newConnection.stop();
             }
         };
-    }, [selectedUserId, senderId]);
+    }, [selectedUserId, senderId, selectedGroupId]);
 
     // Handle user selection and fetch conversation
-    const handleUserSelect = async (userId) => {
+    const handleUserSelect = async (userId, username) => {
         setSelectedUserId(userId);
+        setSelectedUsername(username);
+        setSelectedGroupId(null);
+        setSelectedGroupName(null);
         try {
             const response = await axios.get(`http://localhost:5268/api/ChatMessages/conversation?receiverId=${userId}&senderId=${sender}`, {
                 headers: {
@@ -127,24 +161,39 @@ const ChatPage = () => {
         }
     };
 
-    const handleGroupSelect = async (selectedGroupId) => {
-        const response = await axios.get()
+    const handleGroupSelect = async (groupId, groupName) => {
+        setSelectedGroupId(groupId);
+        setSelectedGroupName(groupName);
+        setSelectedUserId(null);
+        setSelectedUsername(null);
+        try{
+        const response = await axios.get(`http://localhost:5268/api/ChatMessages/groupConversation?roomId=${selectedGroupId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        console.log("Group Conversation: ", response.data.$values);
+        setMessages(response.data.$values);
+    }catch(err){
+        console.error("Error fetching group conversation:", err);
+    }
     }
 
     // Send a message via SignalR
     const sendMessage = async () => {
-        if (!newMessage || !selectedUserId || !connection) return;
+        if (!newMessage || !connection || (selectedUserId === null && selectedGroupId === null) || (selectedUserId !== null && selectedGroupId !== null)) return;
+
+        console.log(`Group: ${selectedGroupId} receiver: ${selectedUserId}`)
 
         const message = {
             messageText: newMessage,
             senderId: senderId,
-            receiverId: `${selectedUserId}`,
+            receiverId: selectedUserId || null,
+            chatRoomId: selectedGroupId || null,
             sentAt: new Date().toISOString() 
         };
 
-            console.log(message.senderId);
-            console.log(message.receiverId);
-
+            console.log(message);
         // Ensure the connection is started
         if (connection.state === HubConnectionState.Disconnected) {
             try {
@@ -160,6 +209,7 @@ const ChatPage = () => {
             console.log(message);
             await connection.invoke('SendMessage', message);
             console.log("Message sent:", newMessage);
+
             setNewMessage('');
         } catch (error) {
             console.error("Error sending message:", error);
@@ -186,34 +236,69 @@ const ChatPage = () => {
         window.location.href = '/login';
     };
 
+    const handleDropdownToggle = () => {
+        setDropdownOpen(prev => !prev); // Toggle dropdown visibility
+      };
+
     return (
         <div className="chat-page" style={{ display: 'flex' }}>
             <div className="sidebar" style={{ width: '22%', borderRight: '1px solid #ccc', padding: '10px' }}>
+                <h2>{userInfo.username}</h2>
                 <h3>Users</h3>
                 <div className='list-of-users'>
                 {users.map(user => (
-                    <div key={user.userId} onClick={() => handleUserSelect(user.userId)} style={{ cursor: 'pointer' }}>
+                    <div key={user.userId} onClick={() => handleUserSelect(user.userId, user.username)} style={{ cursor: 'pointer' }}>
                         {user.username}
                     </div>
                 ))}
                 </div>
                 <h3>Chat Groups</h3>
                 <div className='list-of-groups'>
-                <button onClick={() => setIsModalOpen(true)}>+ Create Group</button>
+                <button id='create-group-button' onClick={() => setIsModalOpen(true)}>+ Create Group</button>
                 <div className="group-list">
-                        {groups.map(group => (
-                            <div key={group.id} style={{ padding: '5px', border: '1px solid #ccc', marginTop: '5px' }}>
-                                {group.roomName}
-                            </div>
-                        ))}
-                    </div>
+                    {groups.map(group => (
+                        <div key={group.id} onClick={() => handleGroupSelect(group.roomId, group.roomName)} 
+                        style={{ cursor: 'pointer' }}>
+                            {group.roomName}
+                        </div>
+                    ))}
+                    </div> 
                 </div>
             </div>
             <div className="chat-window" style={{ flex: 1, padding: '10px' }}>
-                <h3>Chat <span>{userInfo.username}</span> <span className='logout'><button onClick={handleLogout}>Logout</button></span></h3>
-                <div className="messages" style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px' }}>
+                <h2>Chat <span onClick={handleDropdownToggle} style={{ cursor: 'pointer' }}>{selectedGroupName ? selectedGroupName : selectedUsername}</span> <span className='logout'><button onClick={handleLogout}>Logout</button></span></h2>
+                {selectedGroupName && isDropdownOpen && (
+                <div className="dropdown">
+                    {groupUsers.map(groupuser => (
+                        <div key={groupuser.userId} 
+                        style={{ cursor: 'pointer' }}>
+                            {groupuser.username}
+                        </div>
+                    ))}
+                </div>
+                )}
+                <div className="messages" 
+                // style={{ height: '400px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px' }}
+                >
+                    {/* {messages.map((msg, index) => (
+                        <div key={index}>
+                            {msg.senderUsername}: {msg.messageText}</div>
+                    ))} */}
                     {messages.map((msg, index) => (
-                        <div key={index}>{msg.senderId === sender ? "You: " : "User: "} {msg.messageText}</div>
+                        <div 
+                            key={index} 
+                            style={{
+                                textAlign: msg.senderUsername === userInfo.username ? 'end' : 'start',
+                                padding: '10px',
+                                margin: '5px 50px',
+                                fontSize: 'large',
+                                fontFamily: "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",
+                                borderRadius: '5px',
+                                backgroundColor: msg.senderUsername === userInfo.username ? '#d4edda' : '#f8d7da'
+                            }}
+                        >
+                            {msg.senderUsername}: {msg.messageText}
+                        </div>
                     ))}
                 </div>
                 <input
@@ -222,7 +307,7 @@ const ChatPage = () => {
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder='Enter message here'
                 />
-                <button onClick={sendMessage} style={{ width: '15%' }}>Send</button>
+                <button id='send-message-button' onClick={sendMessage} style={{ width: '15%' }}>Send</button>
             </div>
             <CreateGroupModel 
                 isOpen={isModalOpen} 

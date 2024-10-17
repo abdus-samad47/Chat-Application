@@ -1,4 +1,5 @@
-﻿using Real_Time_Chat_Application.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Real_Time_Chat_Application.Models;
 
 namespace Real_Time_Chat_Application.Entities
 {

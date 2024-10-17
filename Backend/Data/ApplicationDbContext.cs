@@ -14,6 +14,7 @@ namespace Real_Time_Chat_Application.Data
         public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<ChatRoomUser> ChatRoomUsers { get; set; }
+        //public DbSet<ActivityStream> ActivityStream { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var pipeline = new List<Action<ModelBuilder>>

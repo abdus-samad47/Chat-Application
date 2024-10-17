@@ -46,11 +46,12 @@ const Login = () => {
 
   return (
     <center>
-    <form onSubmit={handleSubmit}>
+    <form className='login-form' onSubmit={handleSubmit}>
       <h2>Login</h2>
       <div>
-        <label htmlFor="username">Username: </label>
+        <label className='label' htmlFor="username">Username </label>
         <input
+          className='input'
           id="username"
           type="text"
           value={username}
@@ -61,8 +62,9 @@ const Login = () => {
       </div>
       <br />
       <div>
-        <label htmlFor="password">Password: </label>
+        <label className='label' htmlFor="password">Password </label>
         <input
+          className='input'
           id="password"
           type="password"
           value={password}
@@ -72,7 +74,7 @@ const Login = () => {
           />
       </div>
       <br />
-      <button type="submit">Login</button>
+      <button id='button' type="submit">Login</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {success && <p style={{ color: 'green' }}>{success}</p>}
     </form>

@@ -4,102 +4,97 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+  }
+  
+  .model-content {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
     width: 100%;
-}
-
-.modal-content {
-    background-color: #fff; /* White background for the modal */
-    border-radius: 12px; /* Rounded corners */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-    width: 100%; /* Set width */
-    padding: 20px; /* Inner spacing */
-    position: relative; /* For positioning the close button */
-}
-
-form{
-    width: 100%;
-    margin-top  : -10px;
-    height: 100%;
-}
-
-form > input{
-    margin-top: 10px;
-    background-color: lightcyan;
-    width: 80%;
-}
-
-form > h3{
-    color: #f0f0f0;
-}
-
-.modal-title {
-    font-size: 24px; /* Larger font size for the title */
-    color: #333; /* Dark text color */
-}
-
-.close-button {
-    background: none;
-    border: none;
-    font-size: 18px;
-    color: #ff0000; /* Red for close button */
-    cursor: pointer;
-}
-
-.input-field {
-    width: 100%; /* Full width */
-    padding: 12px; /* Padding inside */
-    margin-bottom: 15px; /* Space between fields */
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    box-sizing: border-box; /* Include padding in width */
-}
-
-.user-list {
-    max-height: 150px; /* Limit height */
-    overflow-y: auto; /* Enable scrolling */
-    margin-bottom: 15px; /* Space below */
-    border: 1px solid #ccc; /* Border around user list */
-    border-radius: 8px; /* Rounded corners */
-}
-
-.user-item {
-    padding: 10px; /* Padding inside user items */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.2s; /* Smooth transition */
-}
-
-.user-item:hover {
-    background-color: #f0f0f0; /* Light grey on hover */
-}
-
-.button-container {
+    padding: 20px;
+    position: relative;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  h3 {
+    margin: 15px 0 10px;
+    color: #555;
+  }
+  
+  .create-group-form {
     display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
-}
-
-.submit-button {
-    background-color: #007bff; /* Primary color */
+    flex-direction: column;
+  }
+  
+  input[type="text"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+  }
+  
+  input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .user-list {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .user-list div {
+    margin-bottom: 8px;
+  }
+  
+  label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .submit-button, .cancel-button {
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+   button[type="submit"] {
+    background-color: #007bff;
     color: white;
-    border: none;
-    border-radius: 8px; /* Rounded corners */
-    padding: 10px 20px; /* Button padding */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.3s; /* Smooth transition */
-}
-
-.submit-button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-}
-
-.cancel-button {
-    background: none;
-    border: none;
-    color: #555; /* Grey for cancel */
-    margin-left: 10px; /* Space between buttons */
-    cursor: pointer; /* Pointer cursor */
-}
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  button[type="button"] {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  button[type="button"]:hover {
+    background-color: #c62828;
+  }
+  

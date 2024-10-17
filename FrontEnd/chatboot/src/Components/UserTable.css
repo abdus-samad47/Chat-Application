@@ -1,100 +1,149 @@
-table{
-    border: 1px, solid, black;
-    margin-left: 40%;
+.chat-page {
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  .sidebar {
+    width: 25%;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    background-color: #fff;
+  }
+  
+  .sidebar h2 {
     text-align: center;
-}
-
-thead{
-    background-color: blue;
-    color: white;
-}
-th{
+    margin-bottom: 20px;
+    border: 5px solid blue;
+    margin: 20px 50px;
     padding: 10px;
-    font-size: large;
-}
-body{
-    text-align: center;
-}
-tbody{
-    background-color: aquamarine;
-    overflow: scroll;
-}
-.sidebar{
-    border: 2px solid green;
-    width: 100px;
-}
-.list-of-users{
-    height: 50%;
+  }
+  
+  .sidebar h3 {
+    margin: 15px 0;
+    color: #333;
+    background-color: lightblue;
+    margin: 20px 0;
+    padding: 10px;
+  }
+  
+  .list-of-users, .list-of-groups {
+    max-height: 300px;
     overflow-y: auto;
-    margin-top: 55px;
-    margin-bottom: 8px;
-}
-
-.sidebar > h3{
-    font-size: x-large;
-    width: 100%;
-    background-color: green;
-    margin-top: 0;
-    margin-bottom: 100px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    color: white;
-    position: fixed;
-    width: 21.7%;
-    z-index: 1000;
-}
-.list-of-users > div{
-    background-color: lightgreen;
-    border: 1px solid green;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: medium;
-    font-family: 'Times New Roman', Times, serif;
-}
-.list-of-groups{
-    margin-top: 30px;
-}
-
-.chat-window{
-    border: 2px solid green;
-    width: 100px;
-}
-.chat-window > h3{
+  }
+  
+  .list-of-users div, .group-list div {
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+  }
+  
+  .list-of-users div:hover, .group-list div:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+  }
+  
+  .chat-window {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    height: 90%;
+  }
+  
+  .chat-window h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: x-large;
-    width: 98%;
-    background-color: green;
-    margin-top: 0;
-    margin-bottom: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    color: white;
-    padding-left: 30px;
-}
-.logout{
-    padding-right: 50px;
-}
-.chat-window > div{
-    background-color: lightyellow;
-    border: 1px solid green;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: medium;
-    font-family: 'Times New Roman', Times, serif;
-}
-.chat-window > button{
-    background-color: green;
-    color: white;
-    padding: 10px 15px;
-}
-.chat-window > input{
+  }
+  
+  .messages {
+    flex: auto;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #fafafa;
+    height: 70%;
+  }
+  
+  .messages div {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    max-width: 90%;
+    word-wrap: break-word;
+  }
+  
+  .messages div:nth-child(even) {
+    background-color: #d4edda; /* Sender's message */
+    text-align: right;
+  }
+  
+  .messages div:nth-child(odd) {
+    background-color: #f8d7da; /* Receiver's message */
+  }
+  
+  input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    flex-grow: auto;
     height: 30px;
-    width: 70%;
+  }
+  
+  #create-group-button, #send-message-button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #007bff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 10px;
+  }
+  
+  #create-group-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .logout button {
+    background-color: #dc3545;
+    padding: 10px;
     margin-top: 10px;
-    margin-right: 20px;
-}
-sp{
-    margin-left: 100;
-}
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    color: white;
+  }
+  
+  .logout button:hover {
+    background-color: #c82333;
+  }
+  
+  .dropdown {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 10;
+  }
+  
+  .dropdown div {
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .dropdown div:hover {
+    background-color: #f0f0f0;
+  }
+  

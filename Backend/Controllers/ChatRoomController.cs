@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Real_Time_Chat_Application.Data;
+using Real_Time_Chat_Application.Entities;
 using Real_Time_Chat_Application.Models;
 using Real_Time_Chat_Application.Models.DTOs;
 using Real_Time_Chat_Application.Repositories;
@@ -11,34 +14,61 @@ using System.Threading.Tasks;
 
 namespace Real_Time_Chat_Application.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ChatRoomController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ChatRoomController> _logger;
 
-        public ChatRoomController(ApplicationDbContext context)
+        public ChatRoomController(ApplicationDbContext context, ILogger<ChatRoomController> logger)
         {
             _context = context;
+            _logger = logger;
+            _logger = logger;
         }
-        [Authorize]
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ChatRoom>>> GetChatRooms()
         {
+            //_logger.LogInformation("Getting all Chat Rooms");
             var chatRooms = await _context.ChatRooms.ToListAsync();
             return Ok(chatRooms);
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ChatRoom>> GetChatRoom(int id)
-        //{
-        //    var chatRoom = await _repository.GetByIdAsync(id);
-        //    if (chatRoom == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(chatRoom);
-        //}
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<ChatRoom>>> GetUserChatRooms(int userId)
+        {
+            //_logger.LogInformation("Getting Chat Rooms related to the session user");
+            var chatRooms = await _context.ChatRoomUsers
+                .Where(cru => cru.UserId == userId)
+                .Include(cru => cru.ChatRoom)
+                .Select(cru => cru.ChatRoom)
+                .ToListAsync();
+
+            if (chatRooms == null || !chatRooms.Any())
+            {
+                return NotFound("No chat rooms found for this user.");
+            }
+            return Ok(chatRooms);
+        }
+
+        [HttpGet("room/{roomId}")]
+        public async Task<ActionResult<IEnumerable<ChatRoomUser>>> GetChatRoomUser(int roomId)
+        {
+            var users = await _context.ChatRoomUsers
+                .Where(cru => cru.ChatRoomId == roomId)
+                .Include(cru => cru.User)
+                .Select(cru => cru.User)
+                .ToListAsync();
+
+            if (users == null || !users.Any())
+            {
+                return NotFound("No chat rooms found for this user.");
+            }
+            return Ok(users);
+        }
 
         [Authorize]
         [HttpPost]
@@ -62,6 +92,8 @@ namespace Real_Time_Chat_Application.Controllers
                 //    Role = "Admin" // Set a default role
                 //}).ToList()
             };
+
+
             _context.ChatRooms.Add(chatRoom);
             await _context.SaveChangesAsync();
 
@@ -72,6 +104,8 @@ namespace Real_Time_Chat_Application.Controllers
                 JoinedAt = DateTime.UtcNow,
                 Role = "Member"
             }).ToList();
+
+            _logger.LogInformation($"{chatRoom.RoomName} chat room created");
 
             _context.ChatRoomUsers.AddRange(chatRoomUsers);
             await _context.SaveChangesAsync();

@@ -9,50 +9,23 @@ namespace Real_Time_Chat_Application.Hubs
     public class ChatHub : Hub
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ChatHub> _logger;
 
-        //private static readonly Dictionary<string, string> _connections = new();
-        public ChatHub(ApplicationDbContext context)
+        public ChatHub(ApplicationDbContext context, ILogger<ChatHub> logger)
         {
             _context = context;
+            _logger = logger;
+            _logger = logger;
         }
-
-        //public override Task OnConnectedAsync()
-        //{
-        //    var userId = Context.UserIdentifier;
-
-        //    if (userId != null)
-        //    {
-        //        _connections[userId] = Context.ConnectionId;
-        //    }
-
-        //    return base.OnConnectedAsync();
-        //}
-
-        //public override Task OnDisconnectedAsync(Exception exception)
-        //{
-        //    var userId = Context.UserIdentifier;
-
-        //    if (userId != null)
-        //    {
-        //        _connections.Remove(userId);
-        //    }
-
-        //    return base.OnDisconnectedAsync(exception);
-        //}
-
         public async Task SendMessage(CreateChatMessageDTO createChatMessageDTO)
         {
-            //var senderId = createChatMessageDTO.SenderId.ToString();
+            var sender = await _context.Users.FindAsync(createChatMessageDTO.SenderId);
+            var receiver = await _context.Users.FindAsync(createChatMessageDTO.ReceiverId);
 
-            //var receiverId = createChatMessageDTO.ReceiverId;
-
-            //var userId = Context.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
-
-            //if (!_connections.ContainsKey(senderId))
-            //{
-            //    Console.Error.WriteLine($"User {senderId} is not connected.");
-            //    return;
-            //}
+            if (sender == null || receiver == null)
+            {
+                throw new Exception("Sender or Receiver not found.");
+            }
 
             try
             {
@@ -60,22 +33,32 @@ namespace Real_Time_Chat_Application.Hubs
                 {
                     MessageText = createChatMessageDTO.MessageText,
                     SenderId = createChatMessageDTO.SenderId,
-                    ReceiverId = int.Parse(createChatMessageDTO.ReceiverId),
+                    ReceiverId = createChatMessageDTO.ReceiverId,
+                    ChatRoomId = createChatMessageDTO.ChatRoomId,
                     SentAt = createChatMessageDTO.SentAt
                 };
+
+                //_logger.LogInformation($"User {message.SenderId} is sending a message to {message.ReceiverId} in group {message.ChatRoomId}.");
 
                 await _context.ChatMessages.AddAsync(message);
                 await _context.SaveChangesAsync();
 
                 Console.WriteLine($"Sending message: {message.MessageText} from {message.SenderId} to {message.ReceiverId}");
 
-                //await Clients.User(receiverId).SendAsync("ReceiveMessage", createChatMessageDTO.MessageText);
-
-                await Clients.All.SendAsync("ReceiveMessage", message);
+                await Clients.All.SendAsync("ReceiveMessage", new
+                {
+                    message.MessageText,
+                    message.SenderId,
+                    message.ReceiverId,
+                    message.ChatRoomId,
+                    message.SentAt,
+                    SenderUsername = sender.Username,
+                    ReceiverUsername = receiver.Username
+                });
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"Error in SendMessage: {ex.Message}");
+                _logger.LogError($"Error in SendMessage: {ex.Message}");
                 throw;
             }
         }

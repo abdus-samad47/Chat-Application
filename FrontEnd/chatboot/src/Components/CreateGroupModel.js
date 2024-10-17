@@ -29,8 +29,8 @@ const CreateGroupModel = ({ isOpen, onClose, onSubmit, users, createdBy }) => {
     return (
         <div className="model-overlay">
             <div className="model-content">
+                <form className='create-group-form' onSubmit={handleSubmit}>
                 <h2>Create Group</h2>
-                <form onSubmit={handleSubmit}>
                     <input
                         type="text"
                         placeholder="Group Name"
@@ -52,8 +52,8 @@ const CreateGroupModel = ({ isOpen, onClose, onSubmit, users, createdBy }) => {
                             </div>
                         ))}
                     </div>
-                    <button type="submit">Create Group</button>
-                    <button type="button" onClick={onClose}>Cancel</button>
+                    <button className='submit-button' type="submit">Create Group</button>
+                    <button className='cancel-button' type="button" onClick={onClose}>Cancel</button>
                 </form>
             </div>
         </div>

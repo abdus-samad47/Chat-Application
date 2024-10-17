@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Real_Time_Chat_Application.Builder;
 using Real_Time_Chat_Application.Data;
 using Real_Time_Chat_Application.Entities;
+using Real_Time_Chat_Application.Models;
 using Real_Time_Chat_Application.Models.DTOs;
 using Real_Time_Chat_Application.Utility;
 
@@ -17,22 +19,31 @@ namespace Real_Time_Chat_Application.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly Token _token;
+        private readonly ILogger<UsersController> _logger;
 
 
-        public UsersController(ApplicationDbContext context, IMapper mapper, Token token)
+        public UsersController(ApplicationDbContext context, IMapper mapper, Token token, ILogger<UsersController> logger)
         {
             _context = context;
             _mapper = mapper;
             _token = token;
+            _logger = logger;
         }
 
         // GET: api/Users
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
+            try
+            {
             var users = await _context.Users.ToListAsync();
             return Ok(_mapper.Map<IEnumerable<UserDTO>>(users));
+            }catch(Exception ex)
+            {
+                _logger.LogError($"ERROR: {ex}");
+                return StatusCode(500, "Internal server error. Please try again later.");
+            }
         }
 
         // GET: api/Users/5
@@ -69,6 +80,7 @@ namespace Real_Time_Chat_Application.Controllers
             if (verify)
             {
                 var userDto = _mapper.Map<UserDTO>(user);
+                _logger.LogInformation($"{user.Username} logged in.");
                 return Ok(new { UserDTO = userDto, Token = bearertoken });
             }
             else
@@ -104,7 +116,6 @@ namespace Real_Time_Chat_Application.Controllers
             return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, _mapper.Map<UserDTO>(user));
         }
         
-
         [Authorize]
         // PUT: api/Users/5
         [HttpPut("{id}")]

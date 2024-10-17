@@ -92,6 +92,39 @@ namespace Real_Time_Chat_Application.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("Real_Time_Chat_Application.Models.ActivityStream", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Created_By")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created_On")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Exception")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivityStream");
+                });
+
             modelBuilder.Entity("Real_Time_Chat_Application.Models.ChatMessage", b =>
                 {
                     b.Property<int>("MessageId")
@@ -163,9 +196,6 @@ namespace Real_Time_Chat_Application.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("Room_Name");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("RoomId");
 
                     b.HasIndex("CreatedBy");
@@ -219,7 +249,7 @@ namespace Real_Time_Chat_Application.Migrations
                         .HasForeignKey("ChatRoomId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Real_Time_Chat_Application.Entities.User", "Receiver")
+                    b.HasOne("Real_Time_Chat_Application.Entities.User", "RoomId")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -232,7 +262,7 @@ namespace Real_Time_Chat_Application.Migrations
 
                     b.Navigation("ChatRoom");
 
-                    b.Navigation("Receiver");
+                    b.Navigation("RoomId");
 
                     b.Navigation("Sender");
                 });

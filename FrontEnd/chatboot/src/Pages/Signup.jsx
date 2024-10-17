@@ -56,7 +56,7 @@ const Signup = () => {
         setError('Signup failed. Please try again.');
       }
       setSuccess('');
-      setShowLoginButton(false);  // Hide the login button if there's an error
+      setShowLoginButton(false);
     }
   };
   const handleLoginRedirect = () => {
@@ -65,10 +65,11 @@ const Signup = () => {
 
   return (
     <center>
-    <form onSubmit={handleSubmit}>
+    <form className='signup-form' onSubmit={handleSubmit}>
       <h2>Signup</h2>
-      <label>Username: </label>
+      <label className='label'>Username </label>
       <input
+      className='input'
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
@@ -77,8 +78,9 @@ const Signup = () => {
         />
       <br/>
       <br/>
-      <label>Email: </label>
+      <label className='label'>Email </label>
       <input
+        className='input'
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -87,8 +89,9 @@ const Signup = () => {
         />
       <br />
       <br />
-      <label>Phone Number: </label>
+      <label className='label'>Phone Number </label>
       <input
+        className='input'
         type="text"
         value={phonenumber}
         onChange={(e) => setPhoneNumber(e.target.value)}
@@ -96,8 +99,9 @@ const Signup = () => {
         />
       <br />
       <br />
-      <label>Password: </label>
+      <label className='label'>Password </label>
       <input
+        className='input'
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -105,11 +109,12 @@ const Signup = () => {
         required
         />
       <br />
-      <button type="submit">Signup</button>
+      <br />
+      <button id='button' type="submit">Signup</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {success && <p style={{ color: 'green' }}>{success}</p>}
       {showLoginButton && (
-        <button type="button" onClick={handleLoginRedirect}>
+        <button type="button" id='button' onClick={handleLoginRedirect}>
           Go to Login Page
         </button>
       )}

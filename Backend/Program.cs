@@ -9,8 +9,14 @@ using Real_Time_Chat_Application.Utility;
 using Real_Time_Chat_Application.Hubs;
 using System.Security.Claims;
 using Real_Time_Chat_Application.Repositories;
+using Serilog.Events;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, services, configuration) => configuration
+                .ReadFrom.Configuration(context.Configuration));
+
+//builder.Services.AddSingleton<IActivityLogger, ActivityLogger>();
 
 builder.Services.AddScoped<ChatRoomRepository>();
 

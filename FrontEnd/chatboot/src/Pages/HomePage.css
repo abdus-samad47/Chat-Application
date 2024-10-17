@@ -1,0 +1,32 @@
+#home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #f0f4f8; /* Light background color */
+    font-family: 'Arial', sans-serif; /* Set a clean font */
+}
+
+#homepage-heading {
+    color: #333; /* Darker color for the heading */
+    margin-bottom: 20px; /* Space below the heading */
+    font-size: 2.5em; /* Larger font size */
+}
+
+#homepage-button{
+    width: 8%;
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding for button */
+    font-size: 1.2em; /* Larger text for buttons */
+    margin: 10px; /* Space between buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+#homepage-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}

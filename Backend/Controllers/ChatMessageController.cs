@@ -91,12 +91,12 @@ namespace Real_Time_Chat_Application.Controllers
         }
 
         [HttpGet("groupConversation")]
-        public async Task<ActionResult<IEnumerable<ChatMessageDTO>>> GetGroupConversation(int senderId, int roomId)
+        public async Task<ActionResult<IEnumerable<ChatMessageDTO>>> GetGroupConversation(int roomId)
         {
             var messages = await _context.ChatMessages
                 .Include(m => m.Sender)
                 .Include(m => m.RoomId)
-                .Where(m => (m.SenderId == senderId && m.ChatRoomId == roomId))
+                .Where(m => (m.ChatRoomId == roomId))
                 .ToListAsync();
 
             if (messages == null || !messages.Any())
