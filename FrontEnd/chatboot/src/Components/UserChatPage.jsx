@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 import CreateGroupModel from './CreateGroupModel';
+import UpdateUser from './UpdateUser';
 import './UserTable.css';
 
 const ChatPage = () => {
@@ -23,7 +24,10 @@ const ChatPage = () => {
     const senderId = userInfo.userId;
     const [connection, setConnection] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isProfileUpdateForm, setIsProfileUpdateForm] = useState(false);
     const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+    console.log(userInfo);
 
     // Fetch users on component mount
     useEffect(() => {
@@ -230,6 +234,20 @@ const ChatPage = () => {
         }
     };
 
+    const handleUpdateUser = async (profileUpdateRequestBody) => {
+        try {
+            const response = await axios.put(`http://localhost:5268/api/Users/${userInfo.userId}`, profileUpdateRequestBody, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            console.log("Profile updated successfully: ", response.data);
+        } catch(error){
+            console.error("Error updating profile ", error);
+        }
+    };
+
     const handleLogout = () => {
         sessionStorage.removeItem('jwtToken');
         sessionStorage.removeItem('user');
@@ -243,7 +261,7 @@ const ChatPage = () => {
     return (
         <div className="chat-page" style={{ display: 'flex' }}>
             <div className="sidebar" style={{ width: '22%', borderRight: '1px solid #ccc', padding: '10px' }}>
-                <h2>{userInfo.username}</h2>
+                <h2 onClick={() => setIsProfileUpdateForm(true)} style={{cursor: 'pointer'}}>{userInfo.username}</h2>
                 <h3>Users</h3>
                 <div className='list-of-users'>
                 {users.map(user => (
@@ -315,6 +333,12 @@ const ChatPage = () => {
                 onSubmit={handleCreateGroup}
                 users={users}
                 createdBy={userInfo.userId}
+            />
+            <UpdateUser
+                isOpen={isProfileUpdateForm}
+                onClose={() => setIsProfileUpdateForm(false)}
+                onSubmit={handleUpdateUser}
+                userInfo={userInfo}
             />
         </div>
     );
