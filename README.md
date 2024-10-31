@@ -18,21 +18,6 @@ JWT - For secure authorization
 SignalR - Enables real-time updates
 Serilog - Logging library
 
-Project Structure
-├── Backend
-│   ├── Controllers
-│   ├── Services
-│   ├── Models
-│   └── SignalR Hub
-├── Frontend
-│   ├── Components
-│   ├── Pages
-│   └── Services
-├── Database
-│   └── SQL Server
-└── Logs
-    └── SeriLog
-
 Setup Instructions
 1. Clone the repository:
 git clone https://github.com/your-username/real-time-chat-app.git
